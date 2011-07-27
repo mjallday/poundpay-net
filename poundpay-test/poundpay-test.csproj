@@ -47,6 +47,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PaymentTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ClientTests.cs" />
   </ItemGroup>
