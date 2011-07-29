@@ -4,7 +4,7 @@ function createPayment () {
     args[item.id] = item.value;
   });
   var request = {};
-  request.url = "payment";
+  request.url = "payment/create";
   request.type = "POST";
   request.data = $.param(args);
   request.success = function(data) {
