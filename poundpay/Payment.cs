@@ -29,30 +29,20 @@ namespace poundpay
 		public PaymentCancelError(string first, string second, string third) : base(first, second, third) { }
 	}
 
-
 	/// <summary>
 	/// The Payment <see cref="Resource"/>, represented by a RESTful resource located at
 	/// /payments
 	/// </summary>
-	public class Payment : Resource
+	public class Payment : Resource<Payment>
 	{
-		internal Payment(Client client)
-			: base(client, "payments") { }
-
-		public Payment Create()
-		{
-			return new Payment(this.client);
-		}
-
+        public Payment() : base(null, "payments") { }
+        internal Payment(Client client) : base(client, "payments") { }
+		
 		/// <summary>
 		/// Retrieves the list of past versions of the payment.
-		/// Each item in the list is itself a Payment object
 		/// </summary>
 		public List<Payment> Versions()
 		{
-			//	i don't think this is quite what we want to do
-			throw new NotImplementedException();
-
 			string sid;
 
 			try
@@ -64,36 +54,26 @@ namespace poundpay
 				throw new PaymentError("Sid not specified");
 			}
 
-			var jsonData = this.client.Get(GetPath(sid) + "?versions=all").Json["payments"] as List<Dictionary<string, object>>;
+            var json = client.Get(GetPath(sid) + "?versions=all").Json;
 
-			List<Payment> payments = new List<Payment>();
+            List<Payment> payments = new List<Payment>();
 
-			foreach (var item in jsonData)
-			{
-				Payment p = new Payment(this.client);
+            foreach (var item in json[name] as System.Collections.ArrayList)
+            {
+                var res = new Payment();
+                res.client = client;
 
-				foreach (var key in item.Keys)
-				{
-					p[key] = item[key].ToString();
-				}
+                foreach (var kv in item as IDictionary<string, object>)
+                {
+                    res[kv.Key] = kv.Value == null ? string.Empty : kv.Value.ToString();
+                }
 
-				payments.Add(p);
-			}
+                payments.Add(res);
+            }
 
-			return payments;
+            return payments;
 		}
-		/* def versions(self):
-        """Retrieves the list of past versions of the payment.
-        
-        Each item in the list is itself a Payment object.
-        """
-        cls = self.__class__
-        
-        versions = cls.client.get(cls._get_path(self.sid) + '?versions=all')
-        versions_json = versions.json['payments']
-        
-        return [cls(**version) for version in versions_json]
-    */
+
 		/// <summary>
 		/// Escrows an ``AUTHORIZED`` payment by charging the authorized
 		/// payment method associated with the ``AUTHORIZED`` payment
@@ -110,6 +90,8 @@ namespace poundpay
 			}
 			this["status"] = "ESCROWED";
 			this.Save();
+
+
 		}
 
 		/// <summary>

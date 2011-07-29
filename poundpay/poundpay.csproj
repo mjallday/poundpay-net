@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client.cs" />
+    <Compile Include="Developer.cs" />
     <Compile Include="Payment.cs" />
     <Compile Include="PoundPay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

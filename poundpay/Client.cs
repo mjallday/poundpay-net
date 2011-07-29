@@ -223,13 +223,6 @@ namespace poundpay
 			return response;
 		}
 
-		/*
-    def post(self, path, params):
-        data = _url_encode(params)
-        req = urllib2.Request(self.base_url + path, data)
-        resp = self.opener.open(req)
-        return ClientResponse(resp, resp.read())
-		*/
 		/// <summary>
 		/// Issue a PUT to <paramref name="path"/>
 		/// </summary>
@@ -266,31 +259,6 @@ namespace poundpay
 			return response;
 		}
 
-		/*
-			def put(self, path, params):
-				"""Issue a ``PUT /path/resource-sid``.
-
-				:param path: The resource location + the resource's sid
-				:param params: The parameters to update the resource with.
-				:rtype: A :class:`~poundpay.ClientResponse`.
-
-				::
-
-				   client = Client('YOUR_DEVELOPER_SID', 'YOUR_AUTH_TOKEN')
-				   data = {'status': 'CANCELED'}
-				   client_response = client.put('/silver/payments/PY...', data)
-				   assert client_response.response.getcode() == 201
-				   assert isinstance(client_response.json, dict)
-				   assert client_response.json['status'] == 'CANCELED'
-
-				"""
-
-				data = _url_encode(params)
-				req = urllib2.Request(self.base_url + path, data)
-				req.get_method = lambda: 'PUT'
-				resp = self.opener.open(req)
-				return ClientResponse(resp, resp.read())
-				*/
 		/// <summary>
 		/// Issue a DELETE to <paramref name="path"/>
 		/// </summary>
@@ -315,15 +283,6 @@ namespace poundpay
 
 			return response;
 		}
-		/*
-    def delete(self, path):
-
-        req = urllib2.Request(self.base_url + path)
-        req.get_method = lambda: 'DELETE'
-        resp = self.opener.open(req)
-        return ClientResponse(resp, resp.read())
-
-		*/
 
 		private HttpWebRequest CreateRequest(string url)
 		{
@@ -380,7 +339,5 @@ namespace poundpay
 				}
 			}
 		}
-
-
 	}
 }

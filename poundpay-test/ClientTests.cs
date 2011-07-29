@@ -13,24 +13,17 @@ namespace poundpay_test
 	/// Summary description for UnitTest1
 	/// </summary>
 	[TestClass]
-	public class ClientTests
+	public class ClientTests:TestBase
 	{
-		string developerSid, authToken, apiUrl, apiVersion;
 		/// <summary>
 		/// PoundPay p = new PoundPay(DEVELOPER, AUTH);
 		/// 
-		/// var jsonData = p.Payments.find(params);
+		/// var jsonData = p.Payments.Find(params);
 		/// 
 		/// </summary>
 		public ClientTests()
 		{
-			developerSid = System.Configuration.ConfigurationManager.AppSettings["sid"];
-			authToken = System.Configuration.ConfigurationManager.AppSettings["token"];
-			apiUrl = System.Configuration.ConfigurationManager.AppSettings["api_url"];
-			apiVersion = System.Configuration.ConfigurationManager.AppSettings["version"];
-
-			developerSid = "DV0383d447360511e0bbac00264a09ff3c";
-			authToken = "c31155b9f944d7aed204bdb2a253fef13b4fdcc6ae15402004";
+            base.Init();
 		}
 
 		private TestContext testContextInstance;
@@ -137,7 +130,7 @@ namespace poundpay_test
 				client.baseUrl + " does not end with " + Client.API_VERSION + "/");
 		}
 		[TestMethod]
-		public void test_default_api_url_when_explicity_set_to_None()
+		public void TestDefaultApiUrlWhenSetToNull()
 		{
 			apiUrl = null;
 
@@ -146,12 +139,11 @@ namespace poundpay_test
 			Assert.IsFalse(String.IsNullOrEmpty(client.baseUrl));
 		}
 		[TestMethod]
-		public void test_default_url_and_version()
+		public void TestDefaultUrlAndVersion()
 		{
-
 			var client = new Client(developerSid, authToken, apiUrl, apiVersion);
-			Assert.AreEqual(client.baseUrl.Replace("-sandbox", string.Empty),
-						 "https://api.poundpay.com/silver/");
+			Assert.AreEqual(client.baseUrl,
+						 apiUrl + "/" + apiVersion + "/");
 		}
 
 		[TestMethod]
@@ -169,7 +161,7 @@ namespace poundpay_test
 		}
 
 		[TestMethod]
-		public void test_different_url_and_version()
+		public void TestDifferentUrlAndVersionS()
 		{
 			apiUrl = "https://www.reddit.com";
 			apiVersion = "gold";
@@ -194,99 +186,5 @@ namespace poundpay_test
 
 			Assert.AreEqual(deserialized["foo"], "bar");
 		}
-
-		[TestMethod]
-		public void test_get()
-		{
-			//	hacks while we're testing without a poundpay dev account
-			apiUrl = "http://github.com";
-			apiVersion = "api/v2";
-
-			string getFrom = "json/commits/list/poundpay/poundpay-python/master";
-
-			var client = new Client(developerSid, authToken, apiUrl, apiVersion);
-
-			var clientResponse = client.Get(getFrom);
-
-			var parameters = new NameValueCollection() { { "string", "value" }, { "string2", "value2" } };
-
-			Assert.AreEqual(System.Net.HttpStatusCode.OK, clientResponse.Response.StatusCode);
-			Assert.AreEqual(new Uri(apiUrl + "/" + apiVersion + "/" + getFrom),
-				clientResponse.Response.ResponseUri);
-
-
-			
-		}
-
-		/*
-		def test_get(self):
-			client = Client(**self.production_config)
-			resp_dict = {'foo': 'bar'}
-			mock_open = mock.Mock()
-			mock_open.return_value.read.return_value = json.dumps(resp_dict)
-			with mock.patch.object(client.opener,
-								   'open',
-								   mock_open,
-								   mocksignature=True):
-				resp = client.get('payments')
-			self.assertEqual(resp.json, resp_dict)
-			mock_open.return_value.read.assert_called_once_with()
-			*/
-		[TestMethod, Ignore]
-		public void test_post()
-		{
-			throw new NotImplementedException();
-		}
-
-		/*
-		def test_post(self):
-			client = Client(**self.production_config)
-			resp_body_dict = {'foo': 'bar'}
-			mock_open = mock.mocksignature(client.opener.open)
-			mock_resp = mock.Mock()
-			mock_resp.read = mock.Mock(return_value=json.dumps(resp_body_dict))
-			mock_open.mock.return_value = mock_resp
-			with mock.patch.object(client.opener, 'open', new=mock_open):
-				resp = client.post('payments', resp_body_dict)
-			self.assertEqual(resp.json, resp_body_dict)
-			*/
-
-		[TestMethod, Ignore]
-		public void test_delete()
-		{
-			throw new NotImplementedException();
-		}
-
-		/*
-		def test_delete(self):
-			client = Client(**self.production_config)
-			mock_open = mock.mocksignature(client.opener.open)
-			mock_resp = mock.Mock()
-			mock_resp.read = mock.Mock(return_value=json.dumps({}))
-			mock_open.mock.return_value = mock_resp
-			with mock.patch.object(client.opener, 'open', new=mock_open):
-				resp = client.delete('payments/sid')
-			self.assertEqual(resp.json, {})
-			*/
-
-		[TestMethod, Ignore]
-		public void test_put()
-		{
-			throw new NotImplementedException();
-		}
-
-		/*
-		def test_put(self):
-			client = Client(**self.production_config)
-			resp_body_dict = {'foo': 'bar'}
-			mock_open = mock.mocksignature(client.opener.open)
-			mock_resp = mock.Mock()
-			mock_resp.read = mock.Mock(return_value=json.dumps(resp_body_dict))
-			mock_open.mock.return_value = mock_resp
-			with mock.patch.object(client.opener, 'open', new=mock_open):
-				resp = client.put('payments/sid', resp_body_dict)
-			self.assertEqual(resp.json, resp_body_dict)
-			*/
-
 	}
 }

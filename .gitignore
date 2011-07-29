@@ -23,6 +23,8 @@
 *.sbr
 *.sdf
 *.opensdf
+*.pidb
+*.userprefs
 ipch/
 obj/
 [Bb]in
@@ -43,3 +45,4 @@ _ReSharper*/
 
 # Office Temp Files
 ~$*
+*~
